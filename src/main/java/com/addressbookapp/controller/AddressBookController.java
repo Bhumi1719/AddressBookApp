@@ -3,98 +3,53 @@ package com.addressbookapp.controller;
 import com.addressbookapp.model.Contact;
 import com.addressbookapp.service.AddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Scanner;
-
-@Controller
+@RestController
+@RequestMapping("/addressbook")
 public class AddressBookController {
 
     @Autowired
     AddressBookService service;
+    
+    @GetMapping("/greet")
+    public String greet() {
+        return "Welcome to Address Book Application";
+    }
 
-    Scanner sc = new Scanner(System.in);
+    @PostMapping("/create/{name}")
+    public String createAddressBook(@PathVariable String name) {
+        return service.createAddressBook(name);
+    }
 
-    public void start() {
+    @GetMapping("/select/{name}")
+    public String selectAddressBook(@PathVariable String name) {
+        return service.selectAddressBook(name);
+    }
 
-        while (true) {
+    @PostMapping("/add")
+    public String addContact(@RequestBody Contact person) {
+        return service.addContact(person);
+    }
 
-            System.out.println("\n1 Add Contact");
-            System.out.println("2 Edit Contact");
-            System.out.println("3 Delete Contact");
-            System.out.println("4 Display Contacts");
-            System.out.println("5 Exit");
+    @PutMapping("/edit/{name}")
+    public String editContact(@PathVariable String name,
+                              @RequestBody Contact updatedPerson) {
+        return service.editContact(name, updatedPerson);
+    }
 
-            System.out.print("Enter choice: ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+    @DeleteMapping("/delete/{name}")
+    public String deleteContact(@PathVariable String name) {
+        return service.deleteContact(name);
+    }
 
-            switch (choice) {
+    @GetMapping("/contacts")
+    public Object displayContacts() {
+        return service.displayContacts();
+    }
 
-                case 1:
-
-                    Contact person = new Contact();
-
-                    System.out.print("First Name: ");
-                    person.setFirstName(sc.nextLine());
-
-                    System.out.print("Last Name: ");
-                    person.setLastName(sc.nextLine());
-
-                    System.out.print("Address: ");
-                    person.setAddress(sc.nextLine());
-
-                    System.out.print("City: ");
-                    person.setCity(sc.nextLine());
-
-                    System.out.print("State: ");
-                    person.setState(sc.nextLine());
-
-                    System.out.print("Zip: ");
-                    person.setZip(sc.nextLine());
-
-                    System.out.print("Phone: ");
-                    person.setPhoneNumber(sc.nextLine());
-
-                    System.out.print("Email: ");
-                    person.setEmail(sc.nextLine());
-
-                    service.addContact(person);
-                    break;
-
-                case 2:
-
-                    System.out.print("Enter name to edit: ");
-                    String editName = sc.nextLine();
-
-                    System.out.print("Enter new city: ");
-                    String newCity = sc.nextLine();
-
-                    service.editContact(editName, newCity);
-                    break;
-
-                case 3:
-
-                    System.out.print("Enter name to delete: ");
-                    String deleteName = sc.nextLine();
-
-                    service.deleteContact(deleteName);
-                    break;
-
-                case 4:
-
-                    service.displayContacts();
-                    break;
-
-                case 5:
-
-                    System.out.println("Exiting...");
-                    return;
-
-                default:
-
-                    System.out.println("Invalid choice");
-            }
-        }
+    @GetMapping("/all")
+    public Object displayAddressBooks() {
+        return service.displayAddressBooks();
     }
 }
