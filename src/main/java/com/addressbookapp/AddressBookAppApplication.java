@@ -1,13 +1,19 @@
 package com.addressbookapp;
 
+import com.addressbookapp.controller.AddressBookController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
 public class AddressBookAppApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AddressBookAppApplication.class, args);
-	}
+    public static void main(String[] args) {
+    	
+        ApplicationContext context = SpringApplication.run(AddressBookAppApplication.class, args);
 
+        AddressBookController controller = context.getBean(AddressBookController.class);
+
+        controller.start();
+    }
 }

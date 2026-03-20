@@ -2,62 +2,99 @@ package com.addressbookapp.controller;
 
 import com.addressbookapp.model.Contact;
 import com.addressbookapp.service.AddressBookService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import java.util.Scanner;
 
+@Controller
 public class AddressBookController {
 
-    AddressBookService service = new AddressBookService();
+    @Autowired
+    AddressBookService service;
+
+    Scanner sc = new Scanner(System.in);
 
     public void start() {
 
-        Scanner sc = new Scanner(System.in);
+        while (true) {
 
-        Contact person = new Contact();
+            System.out.println("\n1 Add Contact");
+            System.out.println("2 Edit Contact");
+            System.out.println("3 Delete Contact");
+            System.out.println("4 Display Contacts");
+            System.out.println("5 Exit");
 
-        System.out.print("Enter First Name: ");
-        person.setFirstName(sc.nextLine());
+            System.out.print("Enter choice: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
 
-        System.out.print("Enter Last Name: ");
-        person.setLastName(sc.nextLine());
+            switch (choice) {
 
-        System.out.print("Enter Address: ");
-        person.setAddress(sc.nextLine());
+                case 1:
 
-        System.out.print("Enter City: ");
-        person.setCity(sc.nextLine());
+                    Contact person = new Contact();
 
-        System.out.print("Enter State: ");
-        person.setState(sc.nextLine());
+                    System.out.print("First Name: ");
+                    person.setFirstName(sc.nextLine());
 
-        System.out.print("Enter Zip: ");
-        person.setZip(sc.nextLine());
+                    System.out.print("Last Name: ");
+                    person.setLastName(sc.nextLine());
 
-        System.out.print("Enter Phone Number: ");
-        person.setPhoneNumber(sc.nextLine());
+                    System.out.print("Address: ");
+                    person.setAddress(sc.nextLine());
 
-        System.out.print("Enter Email: ");
-        person.setEmail(sc.nextLine());
+                    System.out.print("City: ");
+                    person.setCity(sc.nextLine());
 
-        service.addContact(person);
+                    System.out.print("State: ");
+                    person.setState(sc.nextLine());
 
-        System.out.println("\nContact Added Successfully\n");
+                    System.out.print("Zip: ");
+                    person.setZip(sc.nextLine());
 
-        service.displayContacts();
+                    System.out.print("Phone: ");
+                    person.setPhoneNumber(sc.nextLine());
 
-        // UC3
-        System.out.print("\nEnter First Name to Edit Contact: ");
-        String name = sc.nextLine();
+                    System.out.print("Email: ");
+                    person.setEmail(sc.nextLine());
 
-        service.editContact(name);
+                    service.addContact(person);
+                    break;
 
-        service.displayContacts();
-        
-        System.out.print("\nEnter First Name to Delete Contact: ");
-        String named = sc.nextLine();
+                case 2:
 
-        service.deleteContact(named);
+                    System.out.print("Enter name to edit: ");
+                    String editName = sc.nextLine();
 
-        service.displayContacts();
+                    System.out.print("Enter new city: ");
+                    String newCity = sc.nextLine();
+
+                    service.editContact(editName, newCity);
+                    break;
+
+                case 3:
+
+                    System.out.print("Enter name to delete: ");
+                    String deleteName = sc.nextLine();
+
+                    service.deleteContact(deleteName);
+                    break;
+
+                case 4:
+
+                    service.displayContacts();
+                    break;
+
+                case 5:
+
+                    System.out.println("Exiting...");
+                    return;
+
+                default:
+
+                    System.out.println("Invalid choice");
+            }
+        }
     }
 }

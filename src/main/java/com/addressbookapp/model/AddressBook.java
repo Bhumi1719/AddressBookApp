@@ -10,4 +10,8 @@ public class AddressBook {
     public List<Contact> getContacts() {
         return contacts;
     }
+
+    public void addContact(Contact person) {
+        contacts.add(person);
+    }
 }

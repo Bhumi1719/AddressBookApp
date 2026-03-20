@@ -2,98 +2,64 @@ package com.addressbookapp.service;
 
 import com.addressbookapp.model.AddressBook;
 import com.addressbookapp.model.Contact;
+import org.springframework.stereotype.Service;
 
-import java.util.Scanner;
-
+@Service
 public class AddressBookService {
 
     AddressBook addressBook = new AddressBook();
 
+    // UC2 – Add Contact
     public void addContact(Contact person) {
-        addressBook.getContacts().add(person);
+        addressBook.addContact(person);
+        System.out.println("Contact Added Successfully");
     }
 
-    public void displayContacts() {
+    // UC3 – Edit Contact
+    public void editContact(String name, String newCity) {
 
         for(Contact person : addressBook.getContacts()) {
-            person.display();
-            System.out.println("--------------------");
-        }
-    }
-
-    public void editContact(String firstName) {
-
-        Scanner sc = new Scanner(System.in);
-
-        for(Contact person : addressBook.getContacts()) {
-
-            if(person.getFirstName().equalsIgnoreCase(firstName)) {
-
-                System.out.println("\nSelect field to update:");
-                System.out.println("1. Address");
-                System.out.println("2. City");
-                System.out.println("3. State");
-                System.out.println("4. Zip");
-                System.out.println("5. Phone Number");
-                System.out.println("6. Email");
-
-                int choice = sc.nextInt();
-                sc.nextLine();
-
-                switch (choice) {
-
-                    case 1:
-                        System.out.print("Enter new Address: ");
-                        person.setAddress(sc.nextLine());
-                        break;
-
-                    case 2:
-                        System.out.print("Enter new City: ");
-                        person.setCity(sc.nextLine());
-                        break;
-
-                    case 3:
-                        System.out.print("Enter new State: ");
-                        person.setState(sc.nextLine());
-                        break;
-
-                    case 4:
-                        System.out.print("Enter new Zip: ");
-                        person.setZip(sc.nextLine());
-                        break;
-
-                    case 5:
-                        System.out.print("Enter new Phone Number: ");
-                        person.setPhoneNumber(sc.nextLine());
-                        break;
-
-                    case 6:
-                        System.out.print("Enter new Email: ");
-                        person.setEmail(sc.nextLine());
-                        break;
-
-                    default:
-                        System.out.println("Invalid Choice");
-                }
-
-                System.out.println("\nContact Updated Successfully\n");
+            if(person.getFirstName().equalsIgnoreCase(name)) {
+                person.setCity(newCity);
+                System.out.println("Contact Updated");
                 return;
             }
         }
 
         System.out.println("Contact Not Found");
     }
-    
-    public void deleteContact(String firstName){
 
-        boolean removed = addressBook.getContacts()
-                .removeIf(person ->
-                        person.getFirstName().equalsIgnoreCase(firstName));
+    // UC4 – Delete Contact
+    public void deleteContact(String name) {
 
-        if(removed){
-            System.out.println("Contact Deleted Successfully");
+        Contact toRemove = null;
+
+        for(Contact person : addressBook.getContacts()) {
+            if(person.getFirstName().equalsIgnoreCase(name)) {
+                toRemove = person;
+                break;
+            }
+        }
+
+        if(toRemove != null) {
+            addressBook.getContacts().remove(toRemove);
+            System.out.println("Contact Deleted");
         } else {
             System.out.println("Contact Not Found");
+        }
+    }
+
+    // UC5 – Display Multiple Contacts
+    public void displayContacts() {
+
+        if(addressBook.getContacts().isEmpty()) {
+            System.out.println("No Contacts Found");
+            return;
+        }
+
+        for(Contact person : addressBook.getContacts()) {
+            person.display();
+            System.out.println("----------------------");
         }
     }
 }
